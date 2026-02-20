@@ -1,0 +1,53 @@
+# PowerShell module artifacts
+bin/
+obj/
+*.psm1.bak
+*.psd1.bak
+
+# Build output
+out/
+output/
+publish/
+
+# Test results
+TestResults/
+*.trx
+coverage.xml
+testcoverage.xml
+
+# PowerShell gallery packages
+*.nupkg
+
+# Sensitive data - never commit credentials or secrets
+*secret*
+*credential*
+*password*
+*.key
+*.pfx
+*.p12
+
+# Local configuration files that may contain sensitive data
+*.local.ps1
+*.local.json
+*local.settings.json
+
+# Logs
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+temp/
+tmp/
