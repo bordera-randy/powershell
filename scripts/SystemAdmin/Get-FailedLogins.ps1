@@ -73,16 +73,16 @@ $failureReasons = @{
 # ---------------------------------------------------------------------------
 # Main execution
 # ---------------------------------------------------------------------------
-Write-Host "`n=== Failed Login Audit ===" -ForegroundColor Green
-Write-Host "  Computer: $ComputerName" -ForegroundColor Cyan
-Write-Host "  Time range: Last $Hours hour(s)" -ForegroundColor Cyan
-Write-Host "  Top N: $TopN" -ForegroundColor Cyan
+Write-Verbose "`n=== Failed Login Audit ==="
+Write-Verbose "  Computer: $ComputerName"
+Write-Verbose "  Time range: Last $Hours hour(s)"
+Write-Verbose "  Top N: $TopN"
 
 $startTime = (Get-Date).AddHours(-$Hours)
 $allResults = @()
 
 # --- Query Event ID 4625 (Failed Logon) ---
-Write-Host "`nQuerying Event ID 4625 (Failed Logon)..." -ForegroundColor Yellow
+Write-Verbose "`nQuerying Event ID 4625 (Failed Logon)..."
 
 try {
     $events4625 = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{
@@ -92,7 +92,7 @@ try {
     } -ErrorAction SilentlyContinue
 
     if ($events4625) {
-        Write-Host "  Found $($events4625.Count) event(s)" -ForegroundColor Cyan
+        Write-Verbose "  Found $($events4625.Count) event(s)"
 
         foreach ($event in $events4625) {
             $xml = [xml]$event.ToXml()
@@ -123,15 +123,15 @@ try {
         }
     }
     else {
-        Write-Host "  No Event 4625 entries found." -ForegroundColor Green
+        Write-Verbose "  No Event 4625 entries found."
     }
 }
 catch {
-    Write-Host "  Error querying Event 4625: $_" -ForegroundColor Red
+    Write-Verbose "  Error querying Event 4625: $_"
 }
 
 # --- Query Event ID 4771 (Kerberos Pre-Auth Failed) ---
-Write-Host "`nQuerying Event ID 4771 (Kerberos Pre-Auth Failed)..." -ForegroundColor Yellow
+Write-Verbose "`nQuerying Event ID 4771 (Kerberos Pre-Auth Failed)..."
 
 try {
     $events4771 = Get-WinEvent -ComputerName $ComputerName -FilterHashtable @{
@@ -141,7 +141,7 @@ try {
     } -ErrorAction SilentlyContinue
 
     if ($events4771) {
-        Write-Host "  Found $($events4771.Count) event(s)" -ForegroundColor Cyan
+        Write-Verbose "  Found $($events4771.Count) event(s)"
 
         foreach ($event in $events4771) {
             $xml = [xml]$event.ToXml()
@@ -171,66 +171,57 @@ try {
         }
     }
     else {
-        Write-Host "  No Event 4771 entries found." -ForegroundColor Green
+        Write-Verbose "  No Event 4771 entries found."
     }
 }
 catch {
-    Write-Host "  Error querying Event 4771: $_" -ForegroundColor Red
+    Write-Verbose "  Error querying Event 4771: $_"
 }
 
 # --- Display results ---
 if ($allResults.Count -eq 0) {
-    Write-Host "`n  No failed login events found in the specified time range." -ForegroundColor Green
-    Write-Host "`n=== Audit Complete ===" -ForegroundColor Green
+    Write-Verbose "`n  No failed login events found in the specified time range."
+    Write-Verbose "`n=== Audit Complete ==="
     exit 0
 }
 
-Write-Host "`n--- Recent Failed Logins ---" -ForegroundColor Yellow
+Write-Verbose "`n--- Recent Failed Logins ---"
 
 $sortedEvents = $allResults | Sort-Object TimeStamp -Descending | Select-Object -First 50
 foreach ($evt in $sortedEvents) {
-    Write-Host "  $($evt.TimeStamp.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Gray -NoNewline
-    Write-Host " | $($evt.AccountName)" -ForegroundColor White -NoNewline
-    Write-Host " | $($evt.SourceIP)" -ForegroundColor Cyan -NoNewline
-    Write-Host " | $($evt.FailureReason)" -ForegroundColor Yellow
+    Write-Verbose "  $($evt.TimeStamp.ToString('yyyy-MM-dd HH:mm:ss')) | $($evt.AccountName) | $($evt.SourceIP) | $($evt.FailureReason)"
 }
 
 # --- Top offending accounts ---
-Write-Host "`n--- Top $TopN Offending Accounts ---" -ForegroundColor Yellow
+Write-Verbose "`n--- Top $TopN Offending Accounts ---"
 
 $byAccount = $allResults | Group-Object -Property AccountName | Sort-Object Count -Descending | Select-Object -First $TopN
 
 foreach ($group in $byAccount) {
-    $color = if ($group.Count -ge 100) { "Red" }
-             elseif ($group.Count -ge 20) { "Yellow" }
-             else { "White" }
-    Write-Host "  $($group.Name): $($group.Count) failure(s)" -ForegroundColor $color
+    Write-Verbose "  $($group.Name): $($group.Count) failure(s)"
 }
 
 # --- Top offending IPs ---
-Write-Host "`n--- Top $TopN Offending Source IPs ---" -ForegroundColor Yellow
+Write-Verbose "`n--- Top $TopN Offending Source IPs ---"
 
 $byIP = $allResults | Where-Object { $_.SourceIP -and $_.SourceIP -ne "-" } |
     Group-Object -Property SourceIP | Sort-Object Count -Descending | Select-Object -First $TopN
 
 foreach ($group in $byIP) {
-    $color = if ($group.Count -ge 100) { "Red" }
-             elseif ($group.Count -ge 20) { "Yellow" }
-             else { "White" }
-    Write-Host "  $($group.Name): $($group.Count) failure(s)" -ForegroundColor $color
+    Write-Verbose "  $($group.Name): $($group.Count) failure(s)"
 }
 
 # --- Summary ---
-Write-Host "`n=== Failed Login Summary ===" -ForegroundColor Green
-Write-Host "  Total failed logon events:  $($allResults.Count)" -ForegroundColor Cyan
-Write-Host "  Event 4625 count:           $(($allResults | Where-Object { $_.EventID -eq 4625 }).Count)" -ForegroundColor Cyan
-Write-Host "  Event 4771 count:           $(($allResults | Where-Object { $_.EventID -eq 4771 }).Count)" -ForegroundColor Cyan
-Write-Host "  Unique accounts targeted:   $($byAccount.Count)" -ForegroundColor Cyan
-Write-Host "  Unique source IPs:          $($byIP.Count)" -ForegroundColor Cyan
+Write-Verbose "`n=== Failed Login Summary ==="
+Write-Verbose "  Total failed logon events:  $($allResults.Count)"
+Write-Verbose "  Event 4625 count:           $(($allResults | Where-Object { $_.EventID -eq 4625 }).Count)"
+Write-Verbose "  Event 4771 count:           $(($allResults | Where-Object { $_.EventID -eq 4771 }).Count)"
+Write-Verbose "  Unique accounts targeted:   $($byAccount.Count)"
+Write-Verbose "  Unique source IPs:          $($byIP.Count)"
 
 $highFrequencyAccounts = ($byAccount | Where-Object { $_.Count -ge 100 }).Count
 if ($highFrequencyAccounts -gt 0) {
-    Write-Host "  HIGH-FREQUENCY accounts (>=100): $highFrequencyAccounts" -ForegroundColor Red
+    Write-Verbose "  HIGH-FREQUENCY accounts (>=100): $highFrequencyAccounts"
 }
 
 # --- Export ---
@@ -241,11 +232,11 @@ if ($ExportPath -and $allResults.Count -gt 0) {
             New-Item -Path $exportDir -ItemType Directory -Force | Out-Null
         }
         $allResults | Export-Csv -Path $ExportPath -NoTypeInformation -Encoding UTF8
-        Write-Host "`n  CSV exported: $ExportPath" -ForegroundColor Green
+        Write-Verbose "`n  CSV exported: $ExportPath"
     }
     catch {
-        Write-Host "`n  Failed to export CSV: $_" -ForegroundColor Red
+        Write-Verbose "`n  Failed to export CSV: $_"
     }
 }
 
-Write-Host "`n=== Audit Complete ===" -ForegroundColor Green
+Write-Verbose "`n=== Audit Complete ==="

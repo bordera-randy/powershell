@@ -200,7 +200,9 @@ foreach ($group in $groups) {
                     $adUser = Get-ADUser -Identity $member.SID -Properties Enabled -ErrorAction SilentlyContinue
                     $memberEnabled = $adUser.Enabled
                 }
-                catch { }
+                catch {
+                    Write-Verbose "Failed to resolve Enabled for member '$($member.SID)': $_"
+                }
             }
 
             $result = [PSCustomObject]@{

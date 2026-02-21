@@ -97,7 +97,9 @@ foreach ($computer in $ComputerName) {
                                 Where-Object { $_.DisplayName }
                             $results += $items
                         }
-                        catch { }
+                        catch {
+                            Write-Verbose "Failed to read uninstall key $regPath: $_"
+                        }
                     }
                     return $results
                 } -ArgumentList (,$registryPaths) -ErrorAction Stop
