@@ -1,0 +1,39 @@
+
+name: PowerShell CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: PowerShell/PowerShell@v1
+
+      - name: Install Modules
+        run: |
+          pwsh -Command "Install-Module PSScriptAnalyzer -Force -Scope CurrentUser"
+          pwsh -Command "Install-Module Pester -Force -Scope CurrentUser"
+
+      - name: Run Script Analyzer
+        run: |
+          pwsh -Command "Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings PSScriptAnalyzerSettings.psd1"
+
+      - name: Run Pester Tests
+        run: |
+          pwsh -Command "Invoke-Pester ./tests"
+
+      - name: Generate Docs
+        run: |
+          pwsh -Command "./build.ps1 -Task Docs"
+      
+      - name: Verify no doc drift
+        run: |
+          git diff --exit-code

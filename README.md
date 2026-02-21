@@ -34,7 +34,7 @@ Scripts include comment-based help, console progress messages, and log files whe
 ## Repository Structure
 
 ```
-PowerShell-Utility/
+PowerShell/
 ├── scripts/
 │   ├── Cloud/
 │   │   ├── Azure/          # Azure VM, storage, RBAC, security, and network auditing
@@ -50,10 +50,10 @@ PowerShell-Utility/
 
 ```powershell
 # Clone the repository
-git clone https://github.com/bordera-randy/PowerShell-Utility.git
+git clone https://github.com/bordera-randy/PowerShell.git
 
 # Navigate to the project directory
-cd PowerShell-Utility
+cd PowerShell
 
 # Set execution policy if needed (run as Administrator)
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser

@@ -1,0 +1,45 @@
+site_name: PowerShell SysAdmin Scripts
+site_description: Production-ready PowerShell automation for system administrators.
+repo_name: powershell-sysadmin-scripts
+repo_url: https://github.com/<YOUR_GITHUB_ORG_OR_USER>/powershell-sysadmin-scripts
+edit_uri: edit/main/docs-site/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - footnotes
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Commands:
+      - Overview: commands/index.md
+      - Get-Example: commands/Get-Example.md
+  - Guides:
+      - Style Guide: guides/style-guide.md
+      - Contributing: guides/contributing.md
+      - Security: guides/security.md
+  - Changelog: changelog.md
