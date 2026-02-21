@@ -8,10 +8,12 @@ This directory contains entertaining and visually appealing PowerShell scripts t
   - [Get-ASCIIArt.ps1](#get-asciiartps1)
   - [Get-BinaryConverter.ps1](#get-binaryconverterps1)
   - [Get-Calendar.ps1](#get-calendarps1)
+  - [Get-CatFact.ps1](#get-catfactps1)
   - [Get-ChuckNorrisJoke.ps1](#get-chucknorrisjokeps1)
   - [Get-CoinFlip.ps1](#get-coinflipps1)
   - [Get-ColorPalette.ps1](#get-colorpaletteps1)
   - [Get-Countdown.ps1](#get-countdownps1)
+  - [Get-DadJoke.ps1](#get-dadjokeps1)
   - [Get-Dice.ps1](#get-diceps1)
   - [Get-DigitalClock.ps1](#get-digitalclockps1)
   - [Get-Excuse.ps1](#get-excuseps1)
@@ -23,7 +25,6 @@ This directory contains entertaining and visually appealing PowerShell scripts t
   - [Get-MorseCode.ps1](#get-morsecodeps1)
   - [Get-MotivationalPoster.ps1](#get-motivationalposterps1)
   - [Get-NumberGuessing.ps1](#get-numberguessingps1)
-  - [Get-PasswordGenerator.ps1](#get-passwordgeneratorps1)
   - [Get-ProgressBarDemo.ps1](#get-progressbardemops1)
   - [Get-RandomColor.ps1](#get-randomcolorps1)
   - [Get-RandomQuote.ps1](#get-randomquoteps1)
@@ -96,15 +97,30 @@ Displays a colorful calendar for the current or specified month with today highl
 
 ---
 
+### Get-CatFact.ps1
+
+Fetches a random cat fact from the [catfact.ninja](https://catfact.ninja/) API and displays it with ASCII art. Falls back to built-in facts when offline.
+
+**API:** [catfact.ninja](https://catfact.ninja/)
+
+**Usage:**
+```powershell
+.\Get-CatFact.ps1
+```
+
+---
+
 ### Get-ChuckNorrisJoke.ps1
 
-Displays random Chuck Norris-style programming jokes with ASCII art.
+Fetches a random Chuck Norris joke from the [chucknorris.io](https://api.chucknorris.io/) API with ASCII art. Supports category filtering and falls back to built-in jokes when offline.
 
-**Source:** Jokes inspired by [Chuck Norris API](https://api.chucknorris.io/) and [r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/)
+**API:** [api.chucknorris.io](https://api.chucknorris.io/)
 
 **Usage:**
 ```powershell
 .\Get-ChuckNorrisJoke.ps1
+.\Get-ChuckNorrisJoke.ps1 -Category dev
+.\Get-ChuckNorrisJoke.ps1 -ListCategories
 ```
 
 ---
@@ -151,6 +167,20 @@ Displays a visual countdown timer with large ASCII numbers and color-coded alert
 
 ---
 
+### Get-DadJoke.ps1
+
+Fetches a random dad joke from the [icanhazdadjoke.com](https://icanhazdadjoke.com/) API. Supports keyword search and falls back to built-in jokes when offline.
+
+**API:** [icanhazdadjoke.com](https://icanhazdadjoke.com/)
+
+**Usage:**
+```powershell
+.\Get-DadJoke.ps1
+.\Get-DadJoke.ps1 -Search "dog"
+```
+
+---
+
 ### Get-Dice.ps1
 
 Rolls virtual dice with ASCII art die faces and totals.
@@ -181,9 +211,9 @@ Displays a large digital clock using ASCII art digits with blinking colon separa
 
 ### Get-Excuse.ps1
 
-Generates humorous random developer excuses for being late, missing deadlines, or explaining bugs.
+Fetches humorous developer excuses from the [Excuser API](https://excuser-three.vercel.app/). Falls back to built-in excuses when offline.
 
-**Source:** Inspired by [Programming Excuses](https://programmingexcuses.com/) and [r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/)
+**API:** [excuser-three.vercel.app](https://excuser-three.vercel.app/)
 
 **Usage:**
 ```powershell
@@ -195,9 +225,9 @@ Generates humorous random developer excuses for being late, missing deadlines, o
 
 ### Get-FortuneCookie.ps1
 
-Displays a random fortune cookie message with ASCII art cookie.
+Fetches a random affirmation/fortune from the [affirmations.dev](https://www.affirmations.dev/) API and displays it with ASCII art cookie. Falls back to built-in fortunes when offline.
 
-**Source:** Inspired by the Unix [`fortune` command](https://en.wikipedia.org/wiki/Fortune_(Unix)) and [fortune-mod](https://github.com/shlomif/fortune-mod)
+**API:** [affirmations.dev](https://www.affirmations.dev/)
 
 **Usage:**
 ```powershell
@@ -304,21 +334,6 @@ A number guessing game where the computer picks a random number and gives higher
 
 ---
 
-### Get-PasswordGenerator.ps1
-
-Generates random secure passwords with configurable length and character requirements, plus strength analysis.
-
-**Source:** Inspired by [Generating Passwords with PowerShell](https://devblogs.microsoft.com/scripting/generating-a-new-password-with-powershell/) and [PowerShell Gallery PasswordGenerator](https://www.powershellgallery.com/packages/PasswordGenerator/)
-
-**Usage:**
-```powershell
-.\Get-PasswordGenerator.ps1
-.\Get-PasswordGenerator.ps1 -Length 24 -Count 5
-.\Get-PasswordGenerator.ps1 -NoSpecial
-```
-
----
-
 ### Get-ProgressBarDemo.ps1
 
 Demonstrates various progress bar styles: classic bar, blocks, dots, and spinner animations.
@@ -349,7 +364,9 @@ Generates random color samples showing console color names with RGB and hex valu
 
 ### Get-RandomQuote.ps1
 
-Display random inspirational, tech, or funny quotes with ASCII art header.
+Fetches a random inspirational quote from the [ZenQuotes API](https://zenquotes.io/). Falls back to built-in tech, inspirational, and funny quotes when offline.
+
+**API:** [zenquotes.io](https://zenquotes.io/)
 
 **Usage:**
 ```powershell
@@ -458,14 +475,15 @@ Converts text to speech using the Windows .NET SpeechSynthesizer with configurab
 
 ### Get-TriviaGame.ps1
 
-A trivia quiz game with tech, science, and general knowledge questions, with score tracking.
+A trivia quiz game powered by the [Open Trivia Database API](https://opentdb.com/). Supports category selection and falls back to built-in questions when offline.
 
-**Source:** Inspired by [Open Trivia Database](https://opentdb.com/) and [r/PowerShell Trivia Game](https://www.reddit.com/r/PowerShell/comments/6r1kz8/trivia_game/)
+**API:** [opentdb.com](https://opentdb.com/)
 
 **Usage:**
 ```powershell
 .\Get-TriviaGame.ps1
 .\Get-TriviaGame.ps1 -Questions 10
+.\Get-TriviaGame.ps1 -Questions 5 -Category 9
 ```
 
 ---
@@ -546,17 +564,24 @@ C:\Path\To\Scripts\Fun\Get-ASCIIArt.ps1 -Text "READY" -Style Block
 ### Meeting Icebreakers
 
 ```powershell
-# Start team meetings with a random quote
+# Start team meetings with a random quote (from ZenQuotes API)
 .\Get-RandomQuote.ps1 -Category Funny
 
 # Show a Star Wars quote
 .\Get-StarWarsQuote.ps1
 
-# Play a quick game of trivia
+# Get a dad joke (from icanhazdadjoke API)
+.\Get-DadJoke.ps1
+.\Get-DadJoke.ps1 -Search "programming"
+
+# Play a quick game of trivia (from Open Trivia Database API)
 .\Get-TriviaGame.ps1 -Questions 3
 
-# Get a developer excuse
+# Get a developer excuse (from Excuser API)
 .\Get-Excuse.ps1 -Category Bug
+
+# Share a cat fact (from catfact.ninja API)
+.\Get-CatFact.ps1
 ```
 
 ### Games and Entertainment
@@ -581,9 +606,6 @@ C:\Path\To\Scripts\Fun\Get-ASCIIArt.ps1 -Text "READY" -Style Block
 ### Utilities with Flair
 
 ```powershell
-# Generate secure passwords
-.\Get-PasswordGenerator.ps1 -Length 24 -Count 5
-
 # Convert text to Morse code
 .\Get-MorseCode.ps1 -Text "SOS"
 
@@ -605,6 +627,12 @@ C:\Path\To\Scripts\Fun\Get-ASCIIArt.ps1 -Text "READY" -Style Block
 - [Microsoft Scripting Blog](https://devblogs.microsoft.com/scripting/)
 - [r/PowerShell](https://www.reddit.com/r/PowerShell/)
 - [ANSI Escape Codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
+- [Chuck Norris API](https://api.chucknorris.io/)
+- [icanhazdadjoke API](https://icanhazdadjoke.com/)
+- [ZenQuotes API](https://zenquotes.io/)
+- [Open Trivia Database](https://opentdb.com/)
+- [catfact.ninja API](https://catfact.ninja/)
+- [affirmations.dev API](https://www.affirmations.dev/)
 
 ---
 

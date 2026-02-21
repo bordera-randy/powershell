@@ -1,39 +1,44 @@
 <#
 .SYNOPSIS
-    Displays random Chuck Norris-style programming jokes.
+    Displays random Chuck Norris jokes fetched from the Chuck Norris API.
 .DESCRIPTION
-    This script displays random Chuck Norris-style jokes with a
-    programming/tech twist. Great for lightening the mood during
-    long coding sessions.
+    This script fetches and displays a random Chuck Norris joke from the
+    chucknorris.io API. Falls back to built-in jokes if the API is unavailable.
+    Great for lightening the mood during long coding sessions.
+.PARAMETER Category
+    Optional joke category. Use Get-ChuckNorrisJoke.ps1 -ListCategories to see
+    available categories. Defaults to a random joke with no category filter.
+.PARAMETER ListCategories
+    List all available joke categories from the API.
 .EXAMPLE
     .\Get-ChuckNorrisJoke.ps1
+.EXAMPLE
+    .\Get-ChuckNorrisJoke.ps1 -Category dev
+.EXAMPLE
+    .\Get-ChuckNorrisJoke.ps1 -ListCategories
 .NOTES
     Author: PowerShell Utility Collection
-    Version: 1.0
-    Source: Jokes inspired by https://api.chucknorris.io/
-            and https://www.reddit.com/r/ProgrammerHumor/
+    Version: 2.0
+    API: https://api.chucknorris.io/
 #>
 
-$jokes = @(
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory = $false)]
+    [string]$Category,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$ListCategories
+)
+
+$fallbackJokes = @(
     "Chuck Norris can solve the halting problem... by staring at the code until it behaves.",
     "Chuck Norris doesn't use version control. The code is too afraid to change.",
     "Chuck Norris can write infinite loops that finish in under 2 seconds.",
     "When Chuck Norris throws an exception, nothing can catch it.",
     "Chuck Norris doesn't need a debugger. Bugs confess on their own.",
-    "Chuck Norris can delete the Recycle Bin.",
-    "Chuck Norris's code compiles itself out of fear.",
-    "Chuck Norris doesn't use try-catch. Nothing dares to throw an exception at him.",
-    "Chuck Norris can access private methods from public scope.",
-    "When Chuck Norris does a Git push, the remote always accepts.",
     "Chuck Norris doesn't need sudo. The computer does what he says.",
-    "Chuck Norris can read from /dev/null.",
-    "Chuck Norris's keyboard doesn't have a Ctrl key because nothing controls Chuck Norris.",
-    "Chuck Norris can unit test an entire application with a single assert.",
-    "When Chuck Norris runs PowerShell, it runs away.",
-    "Chuck Norris doesn't deploy to production. Production deploys to Chuck Norris.",
     "Chuck Norris's commit messages are just periods. The code explains itself.",
-    "Chuck Norris can binary search an unsorted array.",
-    "Chuck Norris can make a class that is both abstract and final.",
     "The cloud is just Chuck Norris's personal computer."
 )
 
@@ -54,30 +59,70 @@ $ascii = @"
       APPROVED
 "@
 
+function Show-Joke {
+    param([string]$JokeText)
+
+    Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Yellow
+    Write-Host "  ║                                                              ║" -ForegroundColor Yellow
+
+    $words = $JokeText -split " "
+    $line = " "
+    foreach ($word in $words) {
+        if (($line + " " + $word).Length -gt 61) {
+            Write-Host "  ║ $($line.PadRight(60))║" -ForegroundColor Yellow
+            $line = " $word"
+        }
+        else {
+            $line += " $word"
+        }
+    }
+    if ($line.Trim().Length -gt 0) {
+        Write-Host "  ║ $($line.PadRight(60))║" -ForegroundColor Yellow
+    }
+
+    Write-Host "  ║                                                              ║" -ForegroundColor Yellow
+    Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Yellow
+    Write-Host ""
+}
+
+# List categories mode
+if ($ListCategories) {
+    try {
+        $categories = Invoke-RestMethod -Uri "https://api.chucknorris.io/jokes/categories" -TimeoutSec 10
+        Write-Host ""
+        Write-Host "  Available Chuck Norris joke categories:" -ForegroundColor Cyan
+        $categories | ForEach-Object { Write-Host "    - $_" -ForegroundColor White }
+        Write-Host ""
+    }
+    catch {
+        Write-Warning "Could not reach the Chuck Norris API: $_"
+    }
+    return
+}
+
 Write-Host ""
 Write-Host $ascii -ForegroundColor Red
 Write-Host ""
 
-$joke = $jokes | Get-Random
-
-Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Yellow
-Write-Host "  ║                                                              ║" -ForegroundColor Yellow
-
-$words = $joke -split " "
-$line = " "
-foreach ($word in $words) {
-    if (($line + " " + $word).Length -gt 61) {
-        Write-Host "  ║ $($line.PadRight(60))║" -ForegroundColor Yellow
-        $line = " $word"
+# Fetch joke from API
+$joke = $null
+try {
+    $uri = if ($Category) {
+        "https://api.chucknorris.io/jokes/random?category=$Category"
     }
     else {
-        $line += " $word"
+        "https://api.chucknorris.io/jokes/random"
     }
+    $response = Invoke-RestMethod -Uri $uri -TimeoutSec 10
+    $joke = $response.value
+    Write-Verbose "Fetched joke from chucknorris.io API."
 }
-if ($line.Trim().Length -gt 0) {
-    Write-Host "  ║ $($line.PadRight(60))║" -ForegroundColor Yellow
+catch {
+    Write-Verbose "API unavailable, using built-in jokes: $_"
 }
 
-Write-Host "  ║                                                              ║" -ForegroundColor Yellow
-Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Yellow
-Write-Host ""
+if (-not $joke) {
+    $joke = $fallbackJokes | Get-Random
+}
+
+Show-Joke -JokeText $joke

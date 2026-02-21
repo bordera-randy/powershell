@@ -36,6 +36,8 @@ This directory contains PowerShell scripts for Windows system administration tas
   - [Backup-EventLogs.ps1](#backup-eventlogsps1)
   - [Cleanup-DiskSpace.ps1](#cleanup-diskspaceps1)
   - [Monitor-Performance.ps1](#monitor-performanceps1)
+  - [Get-PublicIPInfo.ps1](#get-publicipinfops1)
+  - [Get-WeatherForecast.ps1](#get-weatherforecastps1)
 - [Common Administrative Tasks](#common-administrative-tasks)
   - [Daily Health Check](#daily-health-check)
   - [Service Troubleshooting](#service-troubleshooting)
@@ -904,6 +906,62 @@ Monitors system performance metrics in real-time.
 - `-LogToFile`: Save monitoring data to a CSV file
 - `-TopProcesses`: Number of top processes to display (default: 10)
 - `-ComputerName`: Remote computer name to monitor (default: local)
+
+### Get-PublicIPInfo.ps1
+
+Retrieves public IP address information using the [ipinfo.io](https://ipinfo.io/) API.
+
+**Features:**
+- Current public IP address detection
+- Geolocation (city, region, country, coordinates)
+- ISP and organization lookup
+- Timezone and postal code
+- Optional specific IP lookup
+- Returns structured PSCustomObject for pipeline use
+
+**Usage:**
+```powershell
+# Get your own public IP info
+.\Get-PublicIPInfo.ps1
+
+# Look up a specific IP address
+.\Get-PublicIPInfo.ps1 -IPAddress 8.8.8.8
+
+# Use with optional API token for higher rate limits
+.\Get-PublicIPInfo.ps1 -Token "your_token_here"
+```
+
+**Parameters:**
+- `-IPAddress`: IP address to look up (default: current machine's public IP)
+- `-Token`: Optional ipinfo.io API token for increased rate limits
+
+### Get-WeatherForecast.ps1
+
+Retrieves and displays a weather forecast using the [wttr.in](https://wttr.in/) API. No API key required.
+
+**Features:**
+- Current temperature and conditions
+- Wind speed and direction
+- Humidity and visibility
+- UV index
+- Multi-day forecast support
+- Auto-detect location or specify city/airport
+
+**Usage:**
+```powershell
+# Get weather for your current location (auto-detected)
+.\Get-WeatherForecast.ps1
+
+# Get weather for a specific city
+.\Get-WeatherForecast.ps1 -Location "New York"
+
+# Get a 3-day forecast
+.\Get-WeatherForecast.ps1 -Location "London" -Days 3
+```
+
+**Parameters:**
+- `-Location`: City name, airport code, or landmark (default: auto-detect)
+- `-Days`: Number of forecast days to show, 1-3 (default: 1)
 
 ## Common Administrative Tasks
 
