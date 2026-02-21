@@ -48,6 +48,17 @@ function get-chuck {
     
     # Display joke in popup window
     $Result = [System.Windows.MessageBox]::Show($MessageBody,$MessageTitle,$ButtonType,$MessageIcon)
+    # Load Windows Presentation Framework for message box
+    Add-Type -AssemblyName PresentationCore,PresentationFramework
+
+    # Configure message box appearance
+    $ButtonType = [System.Windows.MessageBoxButton]::OK
+    $MessageIcon = [System.Windows.MessageBoxImage]::Information
+    $MessageBody = "$($joke.joke)"
+    $MessageTitle = "Random Joke"
+
+    # Display joke in popup window
+    [System.Windows.MessageBox]::Show($MessageBody,$MessageTitle,$ButtonType,$MessageIcon)
 }
 
 <#
