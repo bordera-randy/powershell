@@ -11,7 +11,8 @@
 .EXAMPLE
     .\Get-StarWarsQuote.ps1 -Character Yoda
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Star Wars quotes from https://www.starwars.com/news/15-star-wars-quotes-to-use-in-everyday-life
             and ASCII art inspired by https://www.asciiart.eu/movies/star-wars

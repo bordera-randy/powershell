@@ -8,7 +8,8 @@
     .\Manage-O365Users.ps1 -Action List
     .\Manage-O365Users.ps1 -Action Create -UserPrincipalName "user@domain.com" -DisplayName "John Doe"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

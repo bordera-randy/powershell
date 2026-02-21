@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-MatrixEffect.ps1 -Duration 60 -Speed 30
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.powershellgallery.com/ and
             https://github.com/guyrleech/Microsoft-PowerShell/blob/master/dvdscreensaver.ps1

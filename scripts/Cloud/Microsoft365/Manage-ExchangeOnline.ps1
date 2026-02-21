@@ -8,7 +8,8 @@
     .\Manage-ExchangeOnline.ps1 -Action List
     .\Manage-ExchangeOnline.ps1 -Action Info -Identity "user@domain.com"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

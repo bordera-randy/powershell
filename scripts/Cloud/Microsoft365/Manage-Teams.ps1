@@ -8,7 +8,8 @@
     .\Manage-Teams.ps1 -Action List
     .\Manage-Teams.ps1 -Action Create -TeamName "Project Team" -Description "Team for project collaboration"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

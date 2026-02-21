@@ -11,7 +11,8 @@
 .EXAMPLE
     .\Get-WeatherArt.ps1 -Weather Snowy
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: ASCII art inspired by https://www.asciiart.eu/nature/weather
             and https://github.com/chubin/wttr.in

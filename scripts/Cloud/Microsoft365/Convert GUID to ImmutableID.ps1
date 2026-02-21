@@ -11,7 +11,8 @@
     - Convert-ObjectGUID: Converts a GUID to Base64-encoded ImmutableID format
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     
     Use Case: When synchronizing on-premises AD with Azure AD, you may need to match

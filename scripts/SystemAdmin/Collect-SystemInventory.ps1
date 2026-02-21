@@ -25,7 +25,8 @@
     .\Collect-SystemInventory.ps1 -ComputerName "Server01" -Format Both -IncludeUpdates
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

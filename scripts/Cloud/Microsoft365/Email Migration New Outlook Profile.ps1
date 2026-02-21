@@ -2,7 +2,8 @@
 #     Name: Email Migration New Outlook Profile
 #     Date Created: 7/27/2020
 #     Date Modified: 
-#     Author:  Randy Bordeaux
+#     Author: Randy Bordeaux
+#     GitHub: https://github.com/bordera-randy
 #     Description: This script will create a new outlook profile and set it as the default profile 
 #
 ##########################################################################################################################

@@ -20,6 +20,7 @@
 .NOTES
     Name: Get-DNS.ps1
     Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Date Created: 9/05/2023
     Version: 1.0
     Requires: Internet connection and API key from api-ninjas.com

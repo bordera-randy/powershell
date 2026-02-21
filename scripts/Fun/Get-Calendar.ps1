@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-Calendar.ps1 -Month 12 -Year 2025
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by the Unix 'cal' command
             https://en.wikipedia.org/wiki/Cal_(Unix)

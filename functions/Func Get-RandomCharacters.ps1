@@ -31,7 +31,8 @@
     Returns an 8-character random string of special characters.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     
 .LINK

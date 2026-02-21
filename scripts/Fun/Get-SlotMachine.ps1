@@ -12,7 +12,8 @@
 .EXAMPLE
     .\Get-SlotMachine.ps1 -Spins 5
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.reddit.com/r/PowerShell/comments/8z8fc4/slot_machine/
             and https://rosettacode.org/wiki/Slot_machine

@@ -19,7 +19,8 @@
 .EXAMPLE
     .\Get-TriviaGame.ps1 -Questions 5 -Category 9
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 2.0
     API: https://opentdb.com/
 #>

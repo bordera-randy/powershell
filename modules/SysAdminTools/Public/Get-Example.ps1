@@ -7,6 +7,9 @@ Example function.
 Returns example object.
 .EXAMPLE
 Get-Example
+.NOTES
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
 #>
 [CmdletBinding()]
 param()

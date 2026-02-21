@@ -4,6 +4,7 @@
 #     a new profile named outlook, and set it as default
 #
 #     Author: Randy Bordeaux
+#     GitHub: https://github.com/bordera-randy
 #     Date Created: 6/21/2020
 #     Date Modified
 #

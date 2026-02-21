@@ -24,7 +24,8 @@
     .\Get-AzureSecurityScore.ps1 -SubscriptionId "00000000-0000-0000-0000-000000000000" -Format Both
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Az.Security
 #>

@@ -3,7 +3,8 @@
 #     Name: Merge Active Directory Accounts
 #     Date Created: 8/20/2020
 #     Date Modified: 
-#     Author:  Randy Bordeaux
+#     Author: Randy Bordeaux
+#     GitHub: https://github.com/bordera-randy
 #     Description: This script will disable Directory Sync and allow you to change sync'd account Immutable ID's
 #
 ##########################################################################################################################

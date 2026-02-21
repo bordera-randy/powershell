@@ -7,7 +7,8 @@
     .\Analyze-EventLogs.ps1 -Action Errors -Hours 24
     .\Analyze-EventLogs.ps1 -Action Search -LogName "System" -EventID 1074
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

@@ -11,7 +11,8 @@
 .EXAMPLE
     .\Get-CoinFlip.ps1 -Flips 10
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://devblogs.microsoft.com/scripting/
             and https://www.reddit.com/r/PowerShell/

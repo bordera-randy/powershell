@@ -3,7 +3,8 @@
 #     Name: Mailbox Tickler
 #     Date Created: 8/20/2020
 #     Date Modified: 
-#     Author:  Randy Bordeaux
+#     Author: Randy Bordeaux
+#     GitHub: https://github.com/bordera-randy
 #     Description: This script will connect to the Office 365 and force updataes to mailboxes to trigger address list updates
 #
 ##########################################################################################################################
