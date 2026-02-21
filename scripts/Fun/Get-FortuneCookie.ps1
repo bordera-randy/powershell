@@ -1,20 +1,22 @@
 <#
 .SYNOPSIS
-    Displays a random fortune cookie message.
+    Displays a random fortune cookie message from an API.
 .DESCRIPTION
-    This script shows a random fortune cookie message with ASCII art of a
-    fortune cookie. Includes a collection of classic fortune cookie sayings.
+    This script fetches and shows a random affirmation or fortune from the
+    affirmations.dev API. Falls back to built-in fortunes if the API is
+    unavailable.
 .EXAMPLE
     .\Get-FortuneCookie.ps1
 .NOTES
     Author: PowerShell Utility Collection
-    Version: 1.0
-    Source: Inspired by the Unix 'fortune' command
-            https://en.wikipedia.org/wiki/Fortune_(Unix)
-            and https://github.com/shlomif/fortune-mod
+    Version: 2.0
+    API: https://www.affirmations.dev/
 #>
 
-$fortunes = @(
+[CmdletBinding()]
+param()
+
+$fallbackFortunes = @(
     "A journey of a thousand miles begins with a single step.",
     "Good things come to those who wait... but better things come to those who code.",
     "You will find great success in your next deployment.",
@@ -53,7 +55,22 @@ $cookie = @"
 Write-Host ""
 Write-Host $cookie -ForegroundColor Yellow
 
-$fortune = $fortunes | Get-Random
+# Try fetching a fortune from the affirmations API
+$fortune = $null
+try {
+    $response = Invoke-RestMethod -Uri "https://www.affirmations.dev/" -TimeoutSec 10
+    if ($response -and $response.affirmation) {
+        $fortune = $response.affirmation
+        Write-Verbose "Fetched fortune from affirmations.dev API."
+    }
+}
+catch {
+    Write-Verbose "Affirmations API unavailable, using built-in fortunes: $_"
+}
+
+if (-not $fortune) {
+    $fortune = $fallbackFortunes | Get-Random
+}
 
 Write-Host "  ╔══════════════════════════════════════════════════════╗" -ForegroundColor Cyan
 Write-Host "  ║                                                      ║" -ForegroundColor Cyan

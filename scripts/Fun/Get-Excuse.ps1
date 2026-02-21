@@ -1,23 +1,26 @@
 <#
 .SYNOPSIS
-    Generates a random excuse for being late, missing deadlines, or code bugs.
+    Generates a random developer excuse from the Excuser API.
 .DESCRIPTION
-    This script generates humorous random excuses perfect for developers.
+    This script fetches and displays a humorous developer excuse from the
+    Excuser API (https://excuser-three.vercel.app/). Falls back to built-in
+    excuses if the API is unavailable.
     Categories include excuses for being late, missing deadlines, and
     explaining bugs in your code.
 .PARAMETER Category
     Category of excuse. Valid values: Late, Deadline, Bug, Random.
+    When the API is used, this parameter is not sent to the API.
 .EXAMPLE
     .\Get-Excuse.ps1
 .EXAMPLE
     .\Get-Excuse.ps1 -Category Bug
 .NOTES
     Author: PowerShell Utility Collection
-    Version: 1.0
-    Source: Inspired by https://programmingexcuses.com/
-            and https://www.reddit.com/r/ProgrammerHumor/
+    Version: 2.0
+    API: https://excuser-three.vercel.app/
 #>
 
+[CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
     [ValidateSet("Late", "Deadline", "Bug", "Random")]
@@ -61,13 +64,27 @@ if ($Category -eq "Random") {
     $Category = @("Late", "Deadline", "Bug") | Get-Random
 }
 
-$excuses = switch ($Category) {
-    "Late"     { $lateExcuses }
-    "Deadline" { $deadlineExcuses }
-    "Bug"      { $bugExcuses }
+# Try fetching an excuse from the Excuser API
+$excuse = $null
+try {
+    $response = Invoke-RestMethod -Uri "https://excuser-three.vercel.app/v1/excuse" -TimeoutSec 10
+    if ($response -and $response[0].excuse) {
+        $excuse = $response[0].excuse
+        Write-Verbose "Fetched excuse from Excuser API."
+    }
+}
+catch {
+    Write-Verbose "Excuser API unavailable, using built-in excuses: $_"
 }
 
-$excuse = $excuses | Get-Random
+if (-not $excuse) {
+    $excuses = switch ($Category) {
+        "Late"     { $lateExcuses }
+        "Deadline" { $deadlineExcuses }
+        "Bug"      { $bugExcuses }
+    }
+    $excuse = $excuses | Get-Random
+}
 
 $icon = switch ($Category) {
     "Late"     { "⏰" }
