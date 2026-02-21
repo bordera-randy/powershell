@@ -14,7 +14,8 @@
       - Close-to-tray (optional) with tray icon
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 3.1
     Requirements: Windows PowerShell 5.1+, .NET Framework (WPF assemblies)
 #>
