@@ -7,7 +7,8 @@
     .\Manage-Services.ps1 -Action List
     .\Manage-Services.ps1 -Action Start -ServiceName "Spooler"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

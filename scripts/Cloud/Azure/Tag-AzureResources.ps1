@@ -29,7 +29,8 @@
     .\Tag-AzureResources.ps1 -ResourceGroupName "Dev-RG" -ResourceType "Microsoft.Storage/storageAccounts" -Tags @{ Environment = "Dev" }
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Az.Resources
 #>

@@ -12,7 +12,8 @@
 .EXAMPLE
     .\Get-Hangman.ps1 -Category Tech
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Classic Hangman game, inspired by
             https://www.reddit.com/r/PowerShell/comments/4h203c/hangman_game/

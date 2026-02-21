@@ -7,7 +7,8 @@
     .\Monitor-DiskSpace.ps1
     .\Monitor-DiskSpace.ps1 -ComputerName "Server01" -ThresholdPercent 20
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

@@ -8,7 +8,8 @@
     .\Manage-AzureVMs.ps1 -Action List
     .\Manage-AzureVMs.ps1 -Action Start -ResourceGroupName "MyRG" -VMName "MyVM"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

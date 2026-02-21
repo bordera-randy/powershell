@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-RockPaperScissors.ps1 -Choice Paper -Rounds 5
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.reddit.com/r/PowerShell/comments/86kf5e/
             and https://devblogs.microsoft.com/scripting/powershell-games/

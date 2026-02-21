@@ -19,6 +19,7 @@
 .NOTES
     Name: O365-Discovery.ps1
     Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Date Created: 5/20/2021
     Version: 1.0
     

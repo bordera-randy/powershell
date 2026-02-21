@@ -1,3 +1,10 @@
+<#
+.SYNOPSIS
+    Set email and proxy addresses for Active Directory users.
+.NOTES
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
+#>
 Import-Module ActiveDirectory
 $users = Get-ADUser -Filter *
 foreach ($user in $users)

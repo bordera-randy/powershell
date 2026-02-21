@@ -19,7 +19,8 @@
     [PSCustomObject] with IP, Hostname, City, Region, Country, Location,
     Org, Timezone, and Postal fields.
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     API: https://ipinfo.io/
     Rate limit: 50,000 requests/month (free tier without token)

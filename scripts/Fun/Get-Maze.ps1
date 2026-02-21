@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-Maze.ps1 -Width 20 -Height 12
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Maze generation algorithm inspired by
             https://en.wikipedia.org/wiki/Maze_generation_algorithm

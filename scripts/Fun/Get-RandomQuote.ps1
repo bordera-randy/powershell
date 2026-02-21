@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-RandomQuote.ps1 -Category Tech
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 2.0
     API: https://zenquotes.io/
 #>

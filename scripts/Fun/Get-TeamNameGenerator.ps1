@@ -14,7 +14,8 @@
 .EXAMPLE
     .\Get-TeamNameGenerator.ps1 -Count 10 -Style Epic
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.reddit.com/r/PowerShell/
             and https://namelix.com/ naming patterns

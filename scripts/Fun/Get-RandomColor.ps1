@@ -11,7 +11,8 @@
 .EXAMPLE
     .\Get-RandomColor.ps1 -Count 20
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://stackoverflow.com/questions/20541456/list-of-all-colors-available-for-powershell
             and https://devblogs.microsoft.com/scripting/

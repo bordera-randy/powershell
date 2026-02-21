@@ -2,7 +2,8 @@
 #     Name: Remove Office Installs
 #     Date Created: 
 #     Date Modified: 9/28/2020 
-#     Author:   Dave Green
+#     Author: Randy Bordeaux
+#     GitHub: https://github.com/bordera-randy
 #     Modified: Randy Bordeaux
 #     Description: This script will connect to the Office 365 
 #

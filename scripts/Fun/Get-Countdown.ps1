@@ -14,7 +14,8 @@
 .EXAMPLE
     .\Get-Countdown.ps1 -Seconds 60 -Message "Meeting starts now!"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://community.spiceworks.com/topic/post/6350583
             and https://devblogs.microsoft.com/scripting/

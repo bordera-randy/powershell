@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-Dice.ps1 -Count 3 -Sides 20
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://devblogs.microsoft.com/scripting/weekend-scripter-dice-roller/
             and https://www.powershellgallery.com/

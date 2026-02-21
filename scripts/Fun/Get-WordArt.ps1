@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-WordArt.ps1 -Text "DevOps" -BorderStyle Stars
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://devblogs.microsoft.com/scripting/use-ascii-art-in-powershell/
             and https://www.asciiart.eu/text-art

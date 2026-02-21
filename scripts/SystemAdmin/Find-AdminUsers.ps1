@@ -33,7 +33,8 @@
     Queries DC01 and exports results in both CSV and JSON formats.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

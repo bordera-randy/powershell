@@ -22,7 +22,8 @@
     .\Test-SftpConnection.ps1 -Host "sftp.example.com"
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 
