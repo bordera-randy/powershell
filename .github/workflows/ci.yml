@@ -14,8 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PowerShell
-        uses: PowerShell/PowerShell@v1
+      - name: Verify PowerShell is available
+        run: pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion'
 
       - name: Install Modules
         run: |
