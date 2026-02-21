@@ -32,6 +32,11 @@
     Version: 1.0
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSAvoidUsingConvertToSecureStringWithPlainText',
+    '',
+    Justification = 'Password is generated in-memory for initial provisioning and never logged.'
+)]
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory = $false)]
