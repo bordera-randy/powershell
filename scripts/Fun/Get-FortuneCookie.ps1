@@ -8,7 +8,8 @@
 .EXAMPLE
     .\Get-FortuneCookie.ps1
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 2.0
     API: https://www.affirmations.dev/
 #>

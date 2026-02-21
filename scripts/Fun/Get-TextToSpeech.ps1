@@ -15,7 +15,8 @@
 .EXAMPLE
     .\Get-TextToSpeech.ps1 -Text "Slow speech" -Rate -3
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://devblogs.microsoft.com/scripting/use-powershell-to-make-your-computer-talk/
             and https://learn.microsoft.com/en-us/dotnet/api/system.speech.synthesis.speechsynthesizer

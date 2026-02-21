@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Get-DigitalClock.ps1 -Duration 60 -ShowDate
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.reddit.com/r/PowerShell/comments/3zg3h3/ascii_clock/
             and https://devblogs.microsoft.com/scripting/

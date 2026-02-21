@@ -10,7 +10,8 @@
     This is a reference/utility script showing different email sending patterns.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Valid Office 365 credentials
     

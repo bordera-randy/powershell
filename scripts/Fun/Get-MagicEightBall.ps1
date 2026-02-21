@@ -11,7 +11,8 @@
 .EXAMPLE
     .\Get-MagicEightBall.ps1
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://en.wikipedia.org/wiki/Magic_8-ball
             and https://www.reddit.com/r/PowerShell/comments/5bj39l/magic_8ball/

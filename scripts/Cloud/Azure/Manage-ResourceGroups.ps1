@@ -8,7 +8,8 @@
     .\Manage-ResourceGroups.ps1 -Action List
     .\Manage-ResourceGroups.ps1 -Action Create -ResourceGroupName "MyRG" -Location "eastus"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

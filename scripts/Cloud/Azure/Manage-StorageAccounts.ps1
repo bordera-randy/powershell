@@ -8,7 +8,8 @@
     .\Manage-StorageAccounts.ps1 -Action List
     .\Manage-StorageAccounts.ps1 -Action Create -StorageAccountName "mystorageacct" -ResourceGroupName "MyRG"
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

@@ -12,7 +12,8 @@
 .EXAMPLE
     .\Get-NumberGuessing.ps1 -Max 1000
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Classic number guessing game, inspired by
             https://www.reddit.com/r/PowerShell/comments/3p1jba/powershell_number_guessing_game/

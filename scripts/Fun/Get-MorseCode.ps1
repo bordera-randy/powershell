@@ -14,7 +14,8 @@
 .EXAMPLE
     .\Get-MorseCode.ps1 -MorseCode ".... . .-.. .-.. --- / .-- --- .-. .-.. -.."
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Morse code reference from https://en.wikipedia.org/wiki/Morse_code
             and inspired by https://www.powershellgallery.com/

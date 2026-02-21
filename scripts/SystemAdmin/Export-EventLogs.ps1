@@ -39,7 +39,8 @@
     Exports logs to CSV and creates a zip archive in the specified directory.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Administrator privileges for Security log export
 #>

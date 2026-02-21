@@ -27,7 +27,8 @@
     Inventories all sites including personal sites and exports as CSV.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Microsoft.Online.SharePoint.PowerShell or PnP.PowerShell
 #>

@@ -19,7 +19,8 @@
 .OUTPUTS
     [PSCustomObject] with current conditions and forecast data.
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     API: https://wttr.in/
     No API key required.

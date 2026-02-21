@@ -14,7 +14,8 @@
 .EXAMPLE
     .\Get-ProgressBarDemo.ps1 -Style Blocks -Duration 10
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Source: Inspired by https://www.reddit.com/r/PowerShell/comments/7kd1yy/progress_bar_examples/
             and https://devblogs.microsoft.com/scripting/use-powershell-to-create-progress-bars/

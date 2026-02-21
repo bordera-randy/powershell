@@ -19,7 +19,8 @@
     Retrieves and displays information about Marie Curie.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Internet connection and API key from api-ninjas.com
     

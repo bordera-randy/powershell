@@ -15,7 +15,8 @@
 .EXAMPLE
     .\Get-Excuse.ps1 -Category Bug
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 2.0
     API: https://excuser-three.vercel.app/
 #>

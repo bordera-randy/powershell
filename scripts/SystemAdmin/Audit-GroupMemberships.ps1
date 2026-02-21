@@ -45,7 +45,8 @@
     Full audit with nested resolution, flags groups with more than 25 members.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
 #>
 

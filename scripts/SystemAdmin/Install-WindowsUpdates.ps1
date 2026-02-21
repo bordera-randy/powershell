@@ -38,7 +38,8 @@
     Shows which Security updates would be installed without making changes.
 
 .NOTES
-    Author: PowerShell Utility Collection
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
     Version: 1.0
     Requires: Administrator privileges
     WARNING: Test in a non-production environment before deploying to production servers.
