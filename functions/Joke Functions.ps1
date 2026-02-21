@@ -44,7 +44,7 @@ function get-chuck {
     $ButtonType = [System.Windows.MessageBoxButton]::OK
     $MessageIcon = [System.Windows.MessageBoxImage]::Error
     $MessageBody = "$($joke.value)"
-    $MessageTitle = "Chuck Norris Joke"
+    $MessageTitle = "Chuck Norris Joke!!"
     
     # Display joke in popup window
     $Result = [System.Windows.MessageBox]::Show($MessageBody,$MessageTitle,$ButtonType,$MessageIcon)
