@@ -15,8 +15,9 @@
       - Close-to-tray (optional) with tray icon
 
 .NOTES
-    Author: PowerShell Utility Collection
-    Version: 1.7
+    Author: Randy Bordeaux
+    GitHub: https://github.com/bordera-randy
+    Version: 4.0
     Requirements: Windows PowerShell 5.1+, .NET Framework (WPF assemblies)
 #>
 
@@ -35,6 +36,9 @@ Add-Type -AssemblyName System.Windows.Forms
 # ----------------------------
 # Small helpers (PS 5.1 safe)
 # ----------------------------
+
+
+
 function Nz {
     param([object]$Value, [string]$Default = "")
     if ($null -eq $Value) { return $Default }
@@ -42,6 +46,91 @@ function Nz {
     if ([string]::IsNullOrWhiteSpace($s)) { return $Default }
     return $s
 }
+
+function Show-HelpWindow {
+    param(
+        [System.Windows.Window]$Owner = $null
+    )
+
+    if ($null -eq $Owner) { $Owner = $script:MainWindow }
+
+$doc = @"
+Azure Administration Dashboard (Commercial)
+
+Purpose
+- Quick launcher for common Azure portals and blades.
+- Built with PowerShell 5.1 + WPF.
+
+How to use
+1) Environment: choose Sandbox/Prod to auto-fill Subscription ID (based on your mapping).
+2) Tenant ID (optional): used for tenant-context Entra links.
+   - Entra ID > Overview > Directory (tenant) ID (used for tenant-context links)
+3) Resource Group (optional): used for deep links that support RG context.
+4) Search: filters tiles by name.
+5) Tiles: click to open in your default browser.
+6) Save: writes your current values to config.json next to the script/EXE.
+7) Reset: restores defaults.
+
+Troubleshooting
+- Open an issue on GitHub with a screenshot and description if something's not working.
+- https://github.com/bordera-randy/powershell/issues
+
+"@
+
+    $w = New-Object System.Windows.Window
+    $w.Title = "Help - Azure Administration Dashboard"
+    $w.Width = 820
+    $w.Height = 680
+    $w.WindowStartupLocation = "CenterOwner"
+    $w.Owner = $Owner
+    $w.Background = [System.Windows.Media.Brushes]::White
+    $w.ResizeMode = "CanResize"
+
+    $grid = New-Object System.Windows.Controls.Grid
+    $grid.Margin = "12"
+    $grid.RowDefinitions.Add((New-Object System.Windows.Controls.RowDefinition -Property @{ Height = "Auto" })) | Out-Null
+    $grid.RowDefinitions.Add((New-Object System.Windows.Controls.RowDefinition -Property @{ Height = "*" })) | Out-Null
+    $grid.RowDefinitions.Add((New-Object System.Windows.Controls.RowDefinition -Property @{ Height = "Auto" })) | Out-Null
+
+    $title = New-Object System.Windows.Controls.TextBlock
+    $title.Text = "Help"
+    $title.FontSize = 20
+    $title.FontWeight = "Bold"
+    $title.Margin = "0,0,0,10"
+    [System.Windows.Controls.Grid]::SetRow($title, 0)
+    $grid.Children.Add($title) | Out-Null
+
+    $scroll = New-Object System.Windows.Controls.ScrollViewer
+    $scroll.VerticalScrollBarVisibility = "Auto"
+    $scroll.HorizontalScrollBarVisibility = "Disabled"
+    [System.Windows.Controls.Grid]::SetRow($scroll, 1)
+    $grid.Children.Add($scroll) | Out-Null
+
+    $tb = New-Object System.Windows.Controls.TextBox
+    $tb.Text = $doc
+    $tb.IsReadOnly = $true
+    $tb.TextWrapping = "Wrap"
+    $tb.AcceptsReturn = $true
+    $tb.BorderThickness = "1"
+    $tb.BorderBrush = [System.Windows.Media.Brushes]::Gainsboro
+    $tb.Padding = "12"
+    $tb.FontFamily = "Consolas"
+    $tb.FontSize = 13
+    $scroll.Content = $tb
+
+    $btn = New-Object System.Windows.Controls.Button
+    $btn.Content = "Close"
+    $btn.Width = 100
+    $btn.HorizontalAlignment = "Right"
+    $btn.Margin = "0,10,0,0"
+    $btn.Add_Click({ $w.Close() })
+    [System.Windows.Controls.Grid]::SetRow($btn, 2)
+    $grid.Children.Add($btn) | Out-Null
+
+    $w.Content = $grid
+    $null = $w.ShowDialog()
+}
+
 
 function Test-Guid {
     param([string]$Value)
@@ -347,8 +436,8 @@ $xaml = @"
                                         </Border.OpacityMask>
                                     </Border>
 
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
+                                    <ContentPresenter HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
                                                       Margin="14,8"/>
                                 </Grid>
                             </Border>
@@ -399,118 +488,22 @@ $xaml = @"
         </Style>
     </Window.Resources>
 
-    <Grid Margin="14">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    
+    <DockPanel Margin="14">
 
-        <!-- Configuration -->
-        <Border Grid.Row="0" Background="#FAFAFC" CornerRadius="10" Padding="14" BorderBrush="#E5E7EB" BorderThickness="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="230"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="92"/>
-                    <ColumnDefinition Width="92"/>
-                    <ColumnDefinition Width="260"/>
-                    <ColumnDefinition Width="92"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Header + search -->
-                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical">
-                    <TextBlock Text="Configuration" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
-                    <TextBlock Text="Azure Administration Dashboard" FontSize="20" FontWeight="Bold" Foreground="#111827"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Right">
-                    <TextBlock Text="Search" FontSize="12" FontWeight="Bold" Foreground="#6B7280" HorizontalAlignment="Right"/>
-                    <TextBox x:Name="txtSearch" Width="320" Height="28" Margin="0,4,0,0" HorizontalAlignment="Right"/>
-                </StackPanel>
-
-                <Button x:Name="btnReset" Grid.Row="0" Grid.Column="2" Content="Reset"
-                        Margin="8,4,0,0" Padding="12,7"
-                        Background="#777777" Foreground="White" BorderThickness="0"
-                        FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-
-                <!-- Tenant ID -->
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Directory (Tenant) ID (optional):" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtTenantId" Grid.Row="2" Grid.Column="1" Height="28" Margin="0,2,0,2"/>
-
-                <Button x:Name="btnTenantCopy" Grid.Row="2" Grid.Column="2" Content="Copy" Margin="8,2,0,2" Padding="12,7" FontWeight="Bold"/>
-                <Button x:Name="btnTenantHelp" Grid.Row="2" Grid.Column="3" Content="?" Margin="8,2,0,2"
-                        Background="#3498DB" Foreground="White" BorderThickness="0" FontWeight="Bold"/>
-
-                <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Foreground="#6B7280" FontSize="12"
-                           Text="Entra ID → Overview → Directory (tenant) ID (used for tenant-context Entra links)" TextWrapping="Wrap"/>
-
-                <!-- Environment + Subscription -->
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Environment:" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <ComboBox x:Name="cmbEnv" Grid.Row="5" Grid.Column="1" Height="28" Margin="0,2,0,2" SelectedIndex="0">
-                    <ComboBoxItem Content="Sandbox"/>
-                    <ComboBoxItem Content="Prod"/>
-                </ComboBox><TextBlock Grid.Row="5" Grid.Column="2" Text="Subscription ID:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                <TextBox x:Name="txtSubscriptionId" Grid.Row="5" Grid.Column="3" Height="28" Margin="8,2,0,2"/>
-
-                <Button x:Name="btnSubCopy" Grid.Row="5" Grid.Column="5" Content="Copy" Margin="8,2,0,2" Padding="12,7" FontWeight="Bold" VerticalAlignment="Top"/>
-
-                <Button x:Name="btnSave" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" Content="Save"
-                        Margin="8,2,0,2" Padding="12,7"
-                        Background="#219653" Foreground="White" BorderThickness="0"
-                        FontWeight="Bold" HorizontalAlignment="Right" Width="90"/>
-
-                <!-- Resource Group (optional) -->
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="Resource Group (optional):" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtResourceGroup" Grid.Row="6" Grid.Column="1" Height="28" Margin="0,4,0,0"/>
-                <Button x:Name="btnRgCopy" Grid.Row="6" Grid.Column="2" Content="Copy" Margin="8,4,0,0" Padding="12,7" FontWeight="Bold"/>
-                <TextBlock Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Foreground="#6B7280" FontSize="12" Margin="8,6,0,0"
-                           Text="Optional. Used for deep-linking to a specific resource group (requires Subscription ID)." TextWrapping="Wrap"/>
-
-            </Grid>
-        </Border>
-
-        <!-- Tiles -->
-        <Border Grid.Row="1" Background="#F0F5FA" CornerRadius="10" Padding="10" Margin="0,12,0,12">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,0,4,8">
-                    <TextBlock Text="Azure Portals &amp; Blades" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
-                    <TextBlock Text="Click a tile to open the portal in your default browser" FontSize="13" Foreground="#374151"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="4,0,4,8">
-                    <TextBlock Text="Favorites" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
-                    <TextBlock Text="Pinned tiles (top 6). Edit in config.json later (favorites array)." FontSize="12" Foreground="#6B7280"/>
-                </StackPanel>
-
-                <UniformGrid Grid.Row="3" x:Name="ugFavs" Columns="6" Margin="0,0,0,6"/>
-
-                <ScrollViewer Grid.Row="4" x:Name="svButtons" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <UniformGrid x:Name="ugButtons" Columns="4" Margin="2"/>
-                </ScrollViewer>
-            </Grid>
-        </Border>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top" Background="#FAFAFC" BorderBrush="#E5E7EB" BorderThickness="1" Padding="6,4">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="miExit" Header="E_xit"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem x:Name="miHelp" Header="_How to use"/>
+                <MenuItem x:Name="miAbout" Header="_About"/>
+            </MenuItem>
+        </Menu>
 
         <!-- Footer -->
-        <Border Grid.Row="2" Background="#FAFAFC" CornerRadius="10" Padding="10" BorderBrush="#E5E7EB" BorderThickness="1">
+        <Border DockPanel.Dock="Bottom" Background="#FAFAFC" CornerRadius="12" Padding="10" BorderBrush="#E5E7EB" BorderThickness="1" Margin="0,12,0,0">
             <DockPanel>
                 <CheckBox x:Name="chkCloseToTray" Content="Close to tray" IsChecked="True" VerticalAlignment="Center"/>
                 <TextBlock x:Name="lblStatus" DockPanel.Dock="Left" Margin="16,0,0,0" VerticalAlignment="Center" Foreground="#4B5563" Text="Status: Ready"/>
@@ -518,7 +511,117 @@ $xaml = @"
             </DockPanel>
         </Border>
 
-    </Grid>
+        <!-- Main Content -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>   <!-- Configuration -->
+                <RowDefinition Height="*"/>      <!-- Tabs -->
+            </Grid.RowDefinitions>
+
+            <!-- Configuration -->
+            <Border Grid.Row="0" Background="#FAFAFC" CornerRadius="12" Padding="12" BorderBrush="#E5E7EB" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="92"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Vertical">
+                        <TextBlock Text="Configuration" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
+                        <TextBlock Text="Azure Administration Dashboard" FontSize="20" FontWeight="Bold" Foreground="#111827"/>
+                    </StackPanel>
+
+                    <Button x:Name="btnReset" Grid.Row="0" Grid.Column="2" Content="Reset"
+                            Margin="8,2,0,0" Padding="14,7"
+                            Background="#777777" Foreground="White" BorderThickness="0"
+                            FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                    <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right">
+                        <TextBlock Text="Search" FontSize="12" FontWeight="Bold" Foreground="#6B7280" HorizontalAlignment="Right"/>
+                        <TextBox x:Name="txtSearch" Width="260" Height="28" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <!-- Tenant ID -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Directory (Tenant) ID (optional):" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtTenantId" Grid.Row="2" Grid.Column="1" Height="28" Margin="0,2,0,2"/>
+
+                    <Button x:Name="btnTenantCopy" Grid.Row="2" Grid.Column="2" Content="Copy" Margin="8,2,0,2" Padding="10,6" FontWeight="Bold"/>
+                    <Button x:Name="btnTenantHelp" Grid.Row="2" Grid.Column="3" Content="?" Margin="8,2,0,2"
+                            Background="#3498DB" Foreground="White" BorderThickness="0" FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Foreground="#6B7280" FontSize="12"
+                               Text="Entra ID > Overview > Directory (tenant) ID (used for tenant-context Entra links)" TextWrapping="Wrap"/>
+
+                    <!-- Environment -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Environment:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cmbEnv" Grid.Row="4" Grid.Column="1" Height="28" Margin="0,2,0,2" SelectedIndex="0">
+                        <ComboBoxItem Content="Sandbox"/>
+                        <ComboBoxItem Content="Prod"/>
+                    </ComboBox>
+
+                    <Button x:Name="btnSave" Grid.Row="4" Grid.Column="2" Content="Save"
+                            Margin="8,2,0,2" Padding="10,6"
+                            Background="#219653" Foreground="White" BorderThickness="0"
+                            FontWeight="Bold" HorizontalAlignment="Left" Width="92"/>
+
+                    <!-- Subscription ID -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Subscription ID:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtSubscriptionId" Grid.Row="5" Grid.Column="1" Height="28" Margin="0,2,0,2"/>
+                    <Button x:Name="btnSubCopy" Grid.Row="5" Grid.Column="2" Content="Copy" Margin="8,2,0,2" Padding="10,6" FontWeight="Bold"/>
+
+                    <!-- Resource Group -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Resource Group (optional):" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtResourceGroup" Grid.Row="6" Grid.Column="1" Height="28" Margin="0,2,0,2"/>
+                    <Button x:Name="btnRgCopy" Grid.Row="6" Grid.Column="2" Content="Copy" Margin="8,2,0,2" Padding="10,6" FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="4" Foreground="#6B7280" FontSize="12" VerticalAlignment="Center"
+                               Text="Optional. Used for deep-linking to a specific resource group (requires Subscription ID)." TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+
+            <!-- Tabs -->
+            <Border Grid.Row="1" Background="#F0F5FA" CornerRadius="12" Padding="10" Margin="0,12,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="6"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,0,4,8">
+                        <TextBlock Text="Azure Portals &amp; Blades" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
+                        <TextBlock Text="Click a tile to open the portal in your default browser" FontSize="13" Foreground="#374151"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Vertical" Margin="4,0,4,8">
+                        <TextBlock Text="All Centers" FontSize="12" FontWeight="Bold" Foreground="#6B7280"/>
+                        <TextBlock Text="Use Search to filter. Click a tile to open." FontSize="12" Foreground="#6B7280"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <UniformGrid x:Name="ugButtons" Columns="4" Margin="2"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </DockPanel>
+
 </Window>
 "@
 
@@ -526,9 +629,11 @@ $xaml = @"
 try {
     $reader = New-Object System.Xml.XmlNodeReader ([xml]$xaml)
     $window = [Windows.Markup.XamlReader]::Load($reader)
+
+$script:MainWindow = $window
 } catch {
     $msg = "Failed to load XAML. This usually means invalid XML (common: unescaped & as &amp;).`n`n$($_.Exception.Message)"
-    try { [System.Windows.MessageBox]::Show($msg, "XAML Load Error", "OK", "Error") | Out-Null } catch {}
+    try { [System.Windows.MessageBox]::Show($msg, "XAML Load Error", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error) | Out-Null } catch {}
     Write-Error $msg
     return
 }
@@ -542,6 +647,9 @@ $cmbEnv            = $window.FindName("cmbEnv")
 $btnSave           = $window.FindName("btnSave")
 $btnReset          = $window.FindName("btnReset")
 $btnExit           = $window.FindName("btnExit")
+$miExit            = $window.FindName("miExit")
+$miHelp            = $window.FindName("miHelp")
+$miAbout           = $window.FindName("miAbout")
 $btnTenantHelp     = $window.FindName("btnTenantHelp")
 $btnTenantCopy     = $window.FindName("btnTenantCopy")
 $btnSubCopy        = $window.FindName("btnSubCopy")
@@ -550,7 +658,7 @@ $chkCloseToTray    = $window.FindName("chkCloseToTray")
 $lblStatus         = $window.FindName("lblStatus")
 $svButtons         = $window.FindName("svButtons")
 $ugButtons         = $window.FindName("ugButtons")
-$ugFavs            = $window.FindName("ugFavs")
+$wpFavs            = $window.FindName("ugFavs")
 
 # Initial state
 $txtTenantId.Text = Nz $state.TenantId
@@ -587,7 +695,7 @@ function New-ReadableToolTip {
     $tb.Margin = "8"
     return $tb
 }
-$txtTenantId.ToolTip = (New-ReadableToolTip "Optional. Used for tenant-context Entra links. Find in Entra ID → Overview → Directory (tenant) ID.")
+$txtTenantId.ToolTip = (New-ReadableToolTip "Optional. Used for tenant-context Entra links. Find in Entra ID -> Overview -> Directory (tenant) ID.")
 $cmbEnv.ToolTip = (New-ReadableToolTip "Switch environment. Subscription ID auto-swaps between Prod/Sandbox.")
 $txtSubscriptionId.ToolTip = (New-ReadableToolTip "Subscription ID for the selected environment. Edit it and click Save to persist.")
 $txtResourceGroup.ToolTip = (New-ReadableToolTip "Optional. If provided with Subscription ID, 'Specific Resource Group' opens directly to that RG.")
@@ -603,16 +711,47 @@ $trayMenu = New-Object System.Windows.Forms.ContextMenuStrip
 $miShow = $trayMenu.Items.Add("Show")
 $miHide = $trayMenu.Items.Add("Hide")
 $trayMenu.Items.Add("-") | Out-Null
-$miExit = $trayMenu.Items.Add("Exit")
+$miTrayExit = $trayMenu.Items.Add("Exit")
 $notifyIcon.ContextMenuStrip = $trayMenu
 
 $miShow.Add_Click({ $window.Show(); $window.Activate() })
 $miHide.Add_Click({ $window.Hide() })
-$miExit.Add_Click({
+$miTrayExit.Add_Click({
     $notifyIcon.Visible = $false
     $window.Tag = "ForceExit"
     $window.Close()
 })
+if ($miHelp) { $miHelp.Add_Click({ Show-HelpWindow -Owner $window }) }
+
+if ($miAbout) { $miAbout.Add_Click(
+    {[System.Windows.MessageBox]::Show(
+@"
+Azure Administration Dashboard (Commercial)
+
+Purpose:
+Quick-launch common Azure portals and blades.
+
+Features:
+• Responsive tile layout
+• Search filtering
+• Commercial cloud only
+• Subscription-aware deep links
+
+Author:
+Randy Bordeaux
+
+Version: 4.0
+"@,
+    "About Azure Administration Dashboard",
+    [System.Windows.MessageBoxButton]::OK,
+    [System.Windows.MessageBoxImage]::Information
+) | Out-Null
+}) }
+
+
+if ($miExit) { $miExit.Add_Click({ 
+    try { $window.Close() } catch { [System.Windows.Application]::Current.Shutdown() }
+}) }
 $notifyIcon.Add_DoubleClick({ $window.Show(); $window.Activate() })
 
 # Centers + button map
@@ -641,7 +780,7 @@ function Invoke-Center {
     $lblStatus.Text = "Status: Opening $name ..."
     if (-not (Open-Url -Url $url)) {
         $lblStatus.Text = "Status: Failed to open $name"
-        [System.Windows.MessageBox]::Show("Could not open:`n$url", "Launch failed", "OK", "Error") | Out-Null
+        [System.Windows.MessageBox]::Show("Could not open:`n$url", "Launch failed", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Error) | Out-Null
     } else {
         $lblStatus.Text = "Status: Opened $name"
     }
@@ -651,13 +790,6 @@ function Apply-Filter {
     $q = (Nz $txtSearch.Text).Trim().ToLowerInvariant()
 
     foreach ($entry in $buttonMap) {
-        $b = $entry.Button
-        $hay = ("{0} {1}" -f $entry.Name, $entry.Keywords).ToLowerInvariant()
-        if ($q.Length -eq 0 -or $hay -like "*$q*") { $b.Visibility = "Visible" } else { $b.Visibility = "Collapsed" }
-    }
-
-    # Favorites: hide any favorite that doesn't match search (keeps UX consistent)
-    foreach ($entry in $favButtons) {
         $b = $entry.Button
         $hay = ("{0} {1}" -f $entry.Name, $entry.Keywords).ToLowerInvariant()
         if ($q.Length -eq 0 -or $hay -like "*$q*") { $b.Visibility = "Visible" } else { $b.Visibility = "Collapsed" }
@@ -676,6 +808,8 @@ function New-TileContent {
     param([string]$GlyphHex, [string]$Text, [int]$FontSize = 18)
     $sp = New-Object System.Windows.Controls.StackPanel
     $sp.Orientation = "Horizontal"
+    $sp.HorizontalAlignment = "Center"
+    $sp.VerticalAlignment   = "Center"
     $sp.HorizontalAlignment = "Center"
     $sp.VerticalAlignment = "Center"
 
@@ -723,24 +857,6 @@ function Normalize-Favorites {
 }
 
 
-function Fade-Opacity {
-    param(
-        [Parameter(Mandatory=$true)] [System.Windows.UIElement]$Element,
-        [Parameter(Mandatory=$true)] [double]$To,
-        [int]$Milliseconds = 140
-    )
-    try {
-        $anim = New-Object System.Windows.Media.Animation.DoubleAnimation
-        $anim.To = $To
-        $anim.Duration = (New-Object System.Windows.Duration([TimeSpan]::FromMilliseconds($Milliseconds)))
-        $anim.AccelerationRatio = 0.2
-        $anim.DecelerationRatio = 0.8
-        $Element.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $anim)
-    } catch {
-        # Fallback if animation fails
-        $Element.Opacity = $To
-    }
-}
 
 function Set-StarVisual {
     param(
@@ -785,168 +901,28 @@ function New-PinContextMenu {
     return $cm
 }
 
-function Toggle-Favorite {
-    param([string]$Name)
+function Get-FavoritesPanel {
+    # Favorites tab content is not in the Window NameScope; fetch it from the TabItem object graph.
+    if ($null -eq $tabCenters) { return $null }
 
-    $cur = @()
-    foreach ($n in $script:state.Favorites) { $cur += (Nz $n) }
-
-    $exists = $false
-    foreach ($n in $cur) { if ($n -eq $Name) { $exists = $true; break } }
-
-    if ($exists) {
-        $script:state.Favorites = @($cur | Where-Object { $_ -ne $Name })
-        $lblStatus.Text = "Status: Unpinned '$Name'"
-    } else {
-        $script:state.Favorites = @($Name) + $cur
-        $lblStatus.Text = "Status: Pinned '$Name'"
+    $favTab = $null
+    foreach ($ti in $tabCenters.Items) {
+        if ($ti -is [System.Windows.Controls.TabItem] -and ([string]$ti.Header) -eq "Favorites") { $favTab = $ti; break }
     }
+    if ($null -eq $favTab) { return $null }
 
-    Normalize-Favorites
-    Persist-State
+    # TabItem.Content is ScrollViewer; ScrollViewer.Content is WrapPanel
+    try {
+        $sv = $favTab.Content
+        if ($sv -and $sv.Content -is [System.Windows.Controls.WrapPanel]) { return $sv.Content }
+    } catch { }
 
-    # Rebuild favorites and refresh all star icons
-    Build-Favorites
-    Update-AllStarIcons
-    Apply-Filter
+    return $null
 }
 
-function New-StarButton {
-    param([string]$CenterName)
 
-    $b = New-Object System.Windows.Controls.Button
-    $b.Width = 22
-    $b.Height = 22
-    $b.HorizontalAlignment = "Right"
-    $b.VerticalAlignment = "Top"
-    $b.Margin = "0"
-    $b.Padding = "0"
-    $b.Background = [System.Windows.Media.Brushes]::Transparent
-    $b.BorderThickness = "0"
-    $b.Cursor = "Hand"
-    $b.Tag = $CenterName
-    $b.ToolTip = (New-ReadableToolTip "Pin/unpin this tile to Favorites")
 
-    # Render star reliably on PS5.1
-    $b.FontFamily = (New-Object System.Windows.Media.FontFamily("Segoe UI Symbol"))
-    $b.FontSize = 16
-    $b.FontWeight = "Bold"
-    $b.Opacity = 0
 
-    Set-StarVisual -StarButton $b -IsFav (Get-IsFavorite -Name $CenterName)
-$b.Add_Click({
-        param($sender,$args)
-        # prevent parent tile click
-        if ($args -and $args.PSObject.Properties.Match("Handled").Count -gt 0) { $args.Handled = $true }
-        Toggle-Favorite -Name ([string]$sender.Tag)
-    })
-
-    return $b
-}
-
-function Update-AllStarIcons {
-    foreach ($entry in $buttonMap) {
-        if ($null -ne $entry.StarButton) {
-            Set-StarVisual -StarButton $entry.StarButton -IsFav (Get-IsFavorite -Name $entry.Name)
-        }
-    }
-    foreach ($entry in $favButtons) {
-        if ($null -ne $entry.StarButton) {
-            Set-StarVisual -StarButton $entry.StarButton -IsFav $true
-        }
-    }
-}
-
-function Build-Favorites {
-    $ugFavs.Children.Clear()
-    $favButtons.Clear()
-
-    # Ensure exactly 6 pins
-    $pins = @()
-    foreach ($n in $script:state.Favorites) { if (-not [string]::IsNullOrWhiteSpace((Nz $n))) { $pins += (Nz $n) } }
-    while ($pins.Count -lt 6) { $pins += "" }
-    if ($pins.Count -gt 6) { $pins = $pins[0..5] }
-
-    foreach ($pinName in $pins) {
-        $center = $null
-        foreach ($c in $centers) { if ($c.Name -eq $pinName) { $center = $c; break } }
-
-        if ($null -eq $center) {
-            # placeholder button
-            $ph = New-Object System.Windows.Controls.Button
-            $ph.Style = $window.FindResource("FavButtonStyle")
-            $ph.Background = New-Object System.Windows.Media.SolidColorBrush ([System.Windows.Media.ColorConverter]::ConvertFromString("#9CA3AF"))
-            $ph.Content = (New-TileContent -GlyphHex "E711" -Text "Pin…" -FontSize 14)
-            $ph.ToolTip = (New-ReadableToolTip "Edit favorites in config.json (favorites array).")
-            $ph.IsEnabled = $false
-            $ugFavs.Children.Add($ph) | Out-Null
-            continue
-        }
-
-        $btn = New-Object System.Windows.Controls.Button
-        $btn.Style = $window.FindResource("FavButtonStyle")
-        $btn.Tag = $center
-        $btn.Background = New-Object System.Windows.Media.SolidColorBrush ([System.Windows.Media.ColorConverter]::ConvertFromString($center.Color))
-
-        $glyph = "E8A7"
-        if ($center.ContainsKey("Icon") -and -not [string]::IsNullOrWhiteSpace([string]$center.Icon)) { $glyph = [string]$center.Icon }
-        $grid = New-Object System.Windows.Controls.Grid
-        $grid.Margin = "0"
-
-        # Main content (centered)
-        $main = (New-TileContent -GlyphHex $glyph -Text $center.Name -FontSize 15)
-        $grid.Children.Add($main) | Out-Null
-
-        # Star overlay (top-right corner)
-        $star = (New-StarButton -CenterName $center.Name)
-        $star.HorizontalAlignment = "Right"
-        $star.VerticalAlignment   = "Top"
-        $star.Margin              = "6"
-        $star.Width               = 22
-        $star.Height              = 22
-        $grid.Children.Add($star) | Out-Null
-
-        $btn.Content = $grid
-
-        # Right-click pin/unpin
-        $btn.ContextMenu = (New-PinContextMenu -CenterName $center.Name)
-        $star.ContextMenu = $btn.ContextMenu
-
-        # Wire hover behavior using Tag to avoid closure issues
-        $btn.Tag = @{ Star = $star; Name = $center.Name }
-
-        # Star hover (animated)
-        $btn.Add_MouseEnter({
-            $t = $this.Tag
-            if ($null -ne $t -and $null -ne $t.Star) {
-                Fade-Opacity -Element $t.Star -To 1 -Milliseconds 140
-            }
-        })
-        $btn.Add_MouseLeave({
-            $t = $this.Tag
-            if ($null -ne $t -and $null -ne $t.Star) {
-                if (-not (Get-IsFavorite -Name $t.Name)) {
-                    Fade-Opacity -Element $t.Star -To 0 -Milliseconds 140
-                }
-            }
-        })
-
-        $tip = $center.Notes
-        $u = Resolve-CenterUrl -center $center
-        if (-not [string]::IsNullOrWhiteSpace($u)) {
-            if (-not [string]::IsNullOrWhiteSpace($tip)) { $tip = ("{0}`n{1}" -f $tip, $u) } else { $tip = $u }
-        }
-        $btn.ToolTip = (New-ReadableToolTip $tip)
-
-        $btn.Add_Click({
-            if ($null -eq $this.Tag) { return }
-            Invoke-Center -center $this.Tag
-        })
-
-        $ugFavs.Children.Add($btn) | Out-Null
-        $favButtons.Add([pscustomobject]@{ Button=$btn; Name=$center.Name; Keywords=(Nz $center.Keywords); StarButton=$star }) | Out-Null
-    }
-}
 
 function Build-Buttons {
     $ugButtons.Children.Clear()
@@ -955,7 +931,6 @@ function Build-Buttons {
     foreach ($center in $centers) {
         $btn = New-Object System.Windows.Controls.Button
         $btn.Style = $window.FindResource("TileButtonStyle")
-        $btn.Tag = $center
         $btn.Height = 46
         $btn.Margin = "6"
         $btn.Background = New-Object System.Windows.Media.SolidColorBrush ([System.Windows.Media.ColorConverter]::ConvertFromString($center.Color))
@@ -964,55 +939,39 @@ function Build-Buttons {
         if ($center.ContainsKey("Icon") -and -not [string]::IsNullOrWhiteSpace([string]$center.Icon)) { $glyph = [string]$center.Icon }
         $grid = New-Object System.Windows.Controls.Grid
         $grid.Margin = "0"
+        $grid.HorizontalAlignment = "Stretch"
+        $grid.VerticalAlignment   = "Stretch"
 
-        # Main content (centered)
+        # layout: main content spans full tile; star sits in top-right overlay
+        $grid.RowDefinitions.Add((New-Object System.Windows.Controls.RowDefinition)) | Out-Null
+        $grid.ColumnDefinitions.Add((New-Object System.Windows.Controls.ColumnDefinition)) | Out-Null
+
         $main = (New-TileContent -GlyphHex $glyph -Text $center.Name -FontSize 15)
+        [System.Windows.Controls.Grid]::SetRow($main, 0)
+        [System.Windows.Controls.Grid]::SetColumn($main, 0)
         $grid.Children.Add($main) | Out-Null
-
-        # Star overlay (top-right corner)
-        $star = (New-StarButton -CenterName $center.Name)
-        $star.HorizontalAlignment = "Right"
-        $star.VerticalAlignment   = "Top"
-        $star.Margin              = "6"
-        $star.Width               = 22
-        $star.Height              = 22
-        $grid.Children.Add($star) | Out-Null
-
-        $btn.Content = $grid
+$btn.Content = $grid
 
         # Wire hover behavior using Tag to avoid closure issues
-        $btn.Tag = @{ Star = $star; Name = $center.Name }
-
         # Star hover (animated)
-        $btn.Add_MouseEnter({
-            $t = $this.Tag
-            if ($null -ne $t -and $null -ne $t.Star) {
-                Fade-Opacity -Element $t.Star -To 1 -Milliseconds 140
-            }
-        })
-        $btn.Add_MouseLeave({
-            $t = $this.Tag
-            if ($null -ne $t -and $null -ne $t.Star) {
-                if (-not (Get-IsFavorite -Name $t.Name)) {
-                    Fade-Opacity -Element $t.Star -To 0 -Milliseconds 140
-                }
-            }
-        })
-
-        $tip = $center.Notes
+                $tip = $center.Notes
         $u = Resolve-CenterUrl -center $center
         if (-not [string]::IsNullOrWhiteSpace($u)) {
             if (-not [string]::IsNullOrWhiteSpace($tip)) { $tip = ("{0}`n{1}" -f $tip, $u) } else { $tip = $u }
         }
         $btn.ToolTip = (New-ReadableToolTip $tip)
 
+        # Store center on the button (no closure issues)
+        $localCenter = $center
+        $btn.Tag = [pscustomobject]@{ Center = $localCenter }
+
         $btn.Add_Click({
             if ($null -eq $this.Tag) { return }
-            Invoke-Center -center $this.Tag
+            Invoke-Center -center $this.Tag.Center
         })
 
         $ugButtons.Children.Add($btn) | Out-Null
-        $buttonMap.Add([pscustomobject]@{ Button=$btn; Name=$center.Name; Keywords=(Nz $center.Keywords); StarButton=$star }) | Out-Null
+        $buttonMap.Add([pscustomobject]@{ Button=$btn; Name=$center.Name; Keywords=(Nz $center.Keywords) }) | Out-Null
     }
 
     Recalc-Columns
@@ -1042,31 +1001,28 @@ $cmbEnv.Add_SelectionChanged({
     $envName = Get-SelectedEnv
     $script:state.Environment = $envName
     Sync-SubscriptionTextFromEnv
-
-    Build-Favorites
     Build-Buttons
-    Update-AllStarIcons
     Apply-Filter
 
     $lblStatus.Text = "Status: Environment set to $envName"
 })
 
 $btnTenantHelp.Add_Click({
-    [System.Windows.MessageBox]::Show(
-@"
-Tenant ID (Directory (tenant) ID):
+    $msg = @"
+Tenant ID (Directory (tenant) ID)
 1) Go to https://entra.microsoft.com
-2) Overview
+2) Click Overview
 3) Copy Directory (tenant) ID
 
 This is optional (only used for tenant-context Entra links).
-"@,
+"@
+    [System.Windows.MessageBox]::Show(
+        $msg,
         "Where to Find Tenant ID",
-        "OK",
-        "Information"
+        [System.Windows.MessageBoxButton]::OK,
+        [System.Windows.MessageBoxImage]::Information
     ) | Out-Null
 })
-
 $btnTenantCopy.Add_Click({ Set-ClipboardText -Text (Nz $txtTenantId.Text).Trim(); $lblStatus.Text = "Status: Tenant ID copied" })
 $btnSubCopy.Add_Click({ Set-ClipboardText -Text (Nz $txtSubscriptionId.Text).Trim(); $lblStatus.Text = "Status: Subscription ID copied" })
 $btnRgCopy.Add_Click({ Set-ClipboardText -Text (Nz $txtResourceGroup.Text).Trim(); $lblStatus.Text = "Status: Resource Group copied" })
@@ -1078,11 +1034,11 @@ $btnSave.Add_Click({
     $rg  = (Nz $txtResourceGroup.Text).Trim()
 
     if (-not [string]::IsNullOrWhiteSpace($tid) -and -not (Test-Guid $tid)) {
-        [System.Windows.MessageBox]::Show("Tenant ID must be a valid GUID.", "Invalid Tenant ID", "OK", "Warning") | Out-Null
+        [System.Windows.MessageBox]::Show("Tenant ID must be a valid GUID.", "Invalid Tenant ID", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning) | Out-Null
         return
     }
     if (-not [string]::IsNullOrWhiteSpace($sid) -and -not (Test-Guid $sid)) {
-        [System.Windows.MessageBox]::Show("Subscription ID must be a valid GUID.", "Invalid Subscription ID", "OK", "Warning") | Out-Null
+        [System.Windows.MessageBox]::Show("Subscription ID must be a valid GUID.", "Invalid Subscription ID", [System.Windows.MessageBoxButton]::OK, [System.Windows.MessageBoxImage]::Warning) | Out-Null
         return
     }
 
@@ -1092,10 +1048,7 @@ $btnSave.Add_Click({
     $script:state.ResourceGroup = $rg
 
     Persist-State
-
-    Build-Favorites
     Build-Buttons
-    Update-AllStarIcons
     Apply-Filter
 
     $lblStatus.Text = "Status: Saved configuration"
@@ -1117,10 +1070,7 @@ $btnReset.Add_Click({
 
     $cmbEnv.SelectedIndex = 0
     Sync-SubscriptionTextFromEnv
-
-    Build-Favorites
     Build-Buttons
-    Update-AllStarIcons
     Apply-Filter
 
     $lblStatus.Text = "Status: Reset complete"
@@ -1149,12 +1099,19 @@ $window.Add_Closing({
 # ----------------------------
 # Init
 # ----------------------------
-Build-Favorites
 Build-Buttons
-Update-AllStarIcons
 Apply-Filter
 
 # Show
+$window.Add_Loaded({
+    try {
+        Build-Buttons
+        Apply-Filter
+        $lblStatus.Text = "Status: Ready"
+    } catch {
+        $lblStatus.Text = "Status: " + $_.Exception.Message
+    }
+})
 $null = $window.ShowDialog()
 
 # Cleanup
