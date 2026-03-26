@@ -15,7 +15,7 @@ excessive backup frequency, redundant protection strategies, inappropriate reten
 
 .PARAMETER OutputDir
 The directory where the audit report and raw data files will be saved. Defaults to a timestamped folder in the current location 
-named 'aws-backup-audit-YYYYMMDD-HHmmss'.
+named 'aws-backup-audit-YYYYMMDD-HHmm'.
 
 .PARAMETER WorkbookName
 The filename of the Excel workbook to be generated. Defaults to 'aws-backup-audit.xlsx'.
@@ -44,7 +44,7 @@ $ErrorActionPreference = 'Stop'
 $env:AWS_PAGER = ''
 
 param(
-    [string]$OutputDir = (Join-Path (Get-Location) ("aws-backup-audit-" + (Get-Date -Format 'yyyyMMdd-HHmmss'))),
+    [string]$OutputDir = (Join-Path (Get-Location) ("aws-backup-audit-" + (Get-Date -Format 'yyyyMMdd-HHmm'))),
     [string]$WorkbookName = 'aws-backup-audit.xlsx'
 )
 
